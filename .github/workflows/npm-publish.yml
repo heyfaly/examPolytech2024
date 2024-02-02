@@ -17,10 +17,3 @@ jobs:
           node-version: 16
       - run: npm ci
       - run: npm run build
-      - name: Build and push
-            uses: docker/build-push-action@v5
-            with:
-              context: angular/
-              file: Dockerfile.gha
-              push: true
-              tags: rg.fr-par.scw.cloud/exampolytech2024/faly/java:v1
