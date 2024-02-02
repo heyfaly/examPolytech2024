@@ -1,0 +1,67 @@
+services:
+  database:
+    image: mysql:8.0
+    container_name: msql
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      - MYSQL_DATABASE=myDatabase
+      - MYSQL_ROOT_PASSWORD=mysqlPassword
+      - MYSQL_USER=mysqlUser
+      - MYSQL_PASSWORD=mysqlPassword
+    volumes:
+      - database:/var/lib/mysql
+    networks:
+      - network
+    healthcheck:
+      test: mysqladmin ping -h localhost
+      interval: 10s
+      timeout: 3s
+      retries: 3
+  back:
+    image: java:8
+    build:
+      context: java/
+      #dockerfile: java/Dockerfile
+    container_name: java
+    depends_on:
+      database:
+        condition: service_healthy
+        restart: true
+    links:
+      - database
+    ports:
+      - 8448:8448
+    environment:
+      - spring.datasource.url=jdbc:mysql://database:3306/myDatabase
+      - spring.datasource.username=mysqlUser
+      - spring.datasource.password=mysqlPassword
+      - spring.datasource.initialization-mode=always
+      - spring.datasource.continue-on-error=true
+      - spring.jpa.hibernate.ddl-auto=update
+    networks:
+      - network
+    healthcheck:
+      test: curl http://localhost:8448/actuator/health
+      interval: 10s
+      timeout: 3s
+      retries: 30
+  front:
+    image: angular
+    build:
+      context: angular/
+      #dockerfile: angular/Dockerfile
+    container_name: angular
+    depends_on:
+      back:
+        condition: service_healthy
+        restart: true
+    ports:
+      - 4200:80
+    environment:
+      - BACKEND_URL=http://localhost:8448
+volumes:
+  database:
+networks:
+  network:
