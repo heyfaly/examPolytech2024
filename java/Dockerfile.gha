@@ -1,0 +1,8 @@
+FROM eclipse-temurin:8-jre
+
+EXPOSE 8448
+
+COPY  target/java-*.jar back.jar
+
+CMD ["java", "-jar", "back.jar"]
+
