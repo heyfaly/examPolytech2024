@@ -19,9 +19,9 @@ jobs:
     - name: Use Node.js 10
       uses: actions/setup-node@v3
       with:
-        node-version: 10
-        cache: 'npm'
         context: angular/
         file: Dockerfile.gha
+        node-version: 10
+        cache: 'npm'
     - run: npm ci #comme nmp install mais en plus rapide
     - run: npm run build
