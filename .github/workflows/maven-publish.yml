@@ -24,6 +24,6 @@ jobs:
       with:
         java-version: '8'
         distribution: 'temurin'
-        cache: maven
+        cache: mave
     - name: Build with Maven
       run: mvn -B package --file pom.xml -DskipTests
