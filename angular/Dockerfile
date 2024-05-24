@@ -1,4 +1,4 @@
-FROM node:10 AS builder
+FROM node:22 AS builder
 
 LABEL maintainer="faly"
 
