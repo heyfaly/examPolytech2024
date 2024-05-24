@@ -8,7 +8,7 @@ on:
     types: [created]
 defaults:
   run:
-    working-directory: ./java
+    working-directory: ./angular
 jobs:
   build:
 
